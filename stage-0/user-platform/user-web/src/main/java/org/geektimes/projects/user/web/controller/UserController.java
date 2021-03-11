@@ -2,9 +2,9 @@ package org.geektimes.projects.user.web.controller;
 
 import org.geektimes.projects.user.domain.User;
 import org.geektimes.projects.user.service.UserService;
-import org.geektimes.projects.user.service.impl.UserServiceImpl;
 import org.geektimes.web.mvc.controller.PageController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.POST;
@@ -12,6 +12,9 @@ import javax.ws.rs.Path;
 
 @Path("/user")
 public class UserController implements PageController {
+
+    @Resource(name = "/bean/UserService")
+    private UserService userService;
 
     @POST
     @Path("/register")
@@ -28,10 +31,14 @@ public class UserController implements PageController {
         user.setName(name);
         user.setPassword(password);
         user.setPhoneNumber(phoneNumber);
+        request.getServletContext().log(user.toString());
 
-        UserService userService = new UserServiceImpl();
-        userService.register(user);
-
+        try {
+            userService.register(user);
+        }
+        catch (Throwable t) {
+            return "fail.jsp";
+        }
         return "success.jsp";
     }
 }

@@ -56,12 +56,8 @@ public class FrontControllerServlet extends HttpServlet {
         for (Controller controller : ServiceLoader.load(Controller.class)) {
             Class<?> controllerClass = controller.getClass();
             Path pathFromClass = controllerClass.getAnnotation(Path.class);
-
-
             String requestPath = pathFromClass.value();
             Method[] publicMethods = controllerClass.getMethods();
-
-
             // 处理方法支持的 HTTP 方法集合
             for (Method method : publicMethods) {
                 Set<String> supportedHttpMethods = findSupportedHttpMethods(method);
@@ -71,8 +67,9 @@ public class FrontControllerServlet extends HttpServlet {
                 }
                 handleMethodInfoMapping.put(requestPath,
                         new HandlerMethodInfo(requestPath, method, supportedHttpMethods));
+                System.out.println(requestPath);
+                controllersMapping.put(requestPath, controller);
             }
-            controllersMapping.put(requestPath, controller);
         }
     }
 
@@ -131,11 +128,11 @@ public class FrontControllerServlet extends HttpServlet {
 
                     String httpMethod = request.getMethod();
 
-                    if (!handlerMethodInfo.getSupportedHttpMethods().contains(httpMethod)) {
-                        // HTTP 方法不支持
-                        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-                        return;
-                    }
+//                    if (!handlerMethodInfo.getSupportedHttpMethods().contains(httpMethod)) {
+//                        // HTTP 方法不支持
+//                        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+//                        return;
+//                    }
 
                     if (controller instanceof PageController) {
                         PageController pageController = PageController.class.cast(controller);

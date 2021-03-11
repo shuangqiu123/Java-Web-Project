@@ -31,7 +31,7 @@
             placeholder="请输名称" >
         <label for="inputEmail" class="sr-only">请输电话</label>
         <input
-                type="text" class="form-control" name="phone"
+                type="text" class="form-control" name="phoneNumber"
                 placeholder="请输电话" >
         <label
             for="inputPassword" class="sr-only">Password</label>
